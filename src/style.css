@@ -1,0 +1,76 @@
+:root {
+  --bg: #f4f6f9;
+  --panel: #ffffff;
+  --text: #1f2933;
+  --muted: #616e7c;
+  --border: #d9dee5;
+  font-family: system-ui, "Hiragino Sans", "Noto Sans JP", sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14181d;
+    --panel: #1e242b;
+    --text: #e4e7eb;
+    --muted: #9aa5b1;
+    --border: #323b45;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+}
+
+.site-header,
+main,
+.site-footer {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.site-header h1 {
+  margin: 24px 0 4px;
+  font-size: 1.6rem;
+}
+
+.location {
+  margin: 0 0 16px;
+  color: var(--muted);
+}
+
+main {
+  display: grid;
+  gap: 16px;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.panel h2 {
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+}
+
+.placeholder {
+  margin: 0;
+  color: var(--muted);
+}
+
+.site-footer {
+  margin-top: 24px;
+  padding-bottom: 24px;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.site-footer a {
+  color: inherit;
+}

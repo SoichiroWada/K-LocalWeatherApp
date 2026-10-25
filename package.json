@@ -1,0 +1,16 @@
+{
+  "name": "local-weather-app",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "emulators": "npm run build && npm --prefix functions run build && firebase emulators:start --only functions,hosting"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3",
+    "vite": "^8.3.5"
+  }
+}
