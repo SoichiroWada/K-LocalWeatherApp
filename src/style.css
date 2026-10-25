@@ -294,3 +294,113 @@ main {
   object-fit: contain;
   background: #fff;
 }
+
+.title h1 {
+  margin: 24px 0 4px;
+}
+
+/* 中の横スクロール領域に押し広げられないようにする */
+.forecast-row,
+.panel-row {
+  min-width: 0;
+}
+
+.forecast-row {
+  display: grid;
+  gap: 16px;
+}
+
+/*
+ * 広い画面（フルHD など）では、予報 2 つと画像 2 つを 2×2 に並べ、
+ * 1 画面に収める
+ */
+@media (min-width: 1200px) {
+  .site-header,
+  main,
+  .site-footer {
+    max-width: 1600px;
+  }
+
+  .site-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 8px 24px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  .site-header h1,
+  .title h1 {
+    margin: 0;
+    font-size: 1.4rem;
+  }
+
+  .location,
+  .area-picker {
+    margin: 0;
+  }
+
+  main {
+    gap: 12px;
+  }
+
+  .forecast-row {
+    display: grid;
+    /* 3時間ごとは 8 コマ、週間は 7 日 */
+    grid-template-columns: 8fr 7fr;
+    gap: 12px;
+  }
+
+  .panel {
+    padding: 12px;
+  }
+
+  .panel h2 {
+    font-size: 1rem;
+  }
+
+  .slots {
+    grid-auto-columns: minmax(72px, 1fr);
+  }
+
+  .days {
+    grid-auto-columns: minmax(72px, 1fr);
+  }
+
+  .slot,
+  .day {
+    gap: 0;
+    padding: 6px 2px;
+  }
+
+  .icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  /* 上の段と左右の境目をそろえる */
+  .panel-row {
+    grid-template-columns: 8fr 7fr;
+    gap: 12px;
+  }
+
+  /* 画像は、予報とヘッダー・フッターを除いた残りの高さいっぱいに表示 */
+  .map-thumb,
+  .chart-thumb {
+    height: clamp(280px, calc(100vh - 470px), 720px);
+  }
+
+  .site-footer {
+    margin-top: 8px;
+    padding-bottom: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 24px;
+  }
+
+  .site-footer p {
+    margin: 0;
+  }
+}

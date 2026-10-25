@@ -7,8 +7,10 @@
   </head>
   <body>
     <header class="site-header">
-      <h1>ローカル天気予報</h1>
-      <p id="location" class="location">現在地を調べています…</p>
+      <div class="title">
+        <h1>ローカル天気予報</h1>
+        <p id="location" class="location">現在地を調べています…</p>
+      </div>
       <div class="area-picker">
         <label>
           地域
@@ -19,16 +21,18 @@
     </header>
 
     <main>
-      <section class="panel">
-        <h2>今日〜明日の天気（3時間ごと）</h2>
-        <div id="hourly" class="slots">読み込み中…</div>
-        <p id="report" class="note"></p>
-      </section>
+      <div class="forecast-row">
+        <section class="panel">
+          <h2>今日〜明日の天気（3時間ごと）</h2>
+          <div id="hourly" class="slots">読み込み中…</div>
+          <p id="report" class="note"></p>
+        </section>
 
-      <section class="panel">
-        <h2>週間天気予報</h2>
-        <div id="weekly" class="days">読み込み中…</div>
-      </section>
+        <section class="panel">
+          <h2>週間天気予報</h2>
+          <div id="weekly" class="days">読み込み中…</div>
+        </section>
+      </div>
 
       <div class="panel-row">
         <section class="panel">
