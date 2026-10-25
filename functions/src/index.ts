@@ -1,10 +1,13 @@
 import {readFile} from "node:fs/promises";
 import {setGlobalOptions} from "firebase-functions";
+import {defineSecret, defineString} from "firebase-functions/params";
 import {onRequest, Request} from "firebase-functions/https";
+import {onSchedule} from "firebase-functions/scheduler";
 import * as logger from "firebase-functions/logger";
 import {initializeApp} from "firebase-admin/app";
 import {getStorage} from "firebase-admin/storage";
 import {AddressNotFoundError, Reader, ReaderModel} from "@maxmind/geoip2-node";
+import {GEOIP_OBJECT, downloadGeoLite2, saveGeoLite2} from "./geoip.js";
 
 initializeApp();
 
@@ -13,22 +16,32 @@ initializeApp();
 // traffic spikes by instead downgrading performance.
 setGlobalOptions({region: "asia-northeast1", maxInstances: 10});
 
-/** Cloud Storage 上の GeoLite2 City データベースの場所 */
-const GEOIP_OBJECT = "geoip/GeoLite2-City.mmdb";
+const maxmindAccountId = defineString("MAXMIND_ACCOUNT_ID", {
+  description: "MaxMind のアカウント ID（数字）",
+});
+const maxmindLicenseKey = defineSecret("MAXMIND_LICENSE_KEY");
 
 const isEmulator = process.env.FUNCTIONS_EMULATOR === "true";
 
+/** 読み込んだデータベースを使い回す時間。更新後はこの時間内に切り替わる */
+const READER_TTL_MS = 6 * 60 * 60 * 1000;
+
 let readerPromise: Promise<ReaderModel> | null = null;
+let readerLoadedAt = 0;
 
 /**
- * GeoLite2 のデータベースを読み込む。インスタンスごとに一度だけ読み、
- * 以降はメモリ上のものを使い回す。
+ * GeoLite2 のデータベースを読み込む。読み込んだものはメモリ上で
+ * READER_TTL_MS の間使い回し、その後は Storage から読み直す。
  * 環境変数 GEOIP_DB_PATH があれば、Storage ではなくそのファイルを読む
  * （エミュレーターでの動作確認用）。
  * @return {Promise<ReaderModel>} GeoIP2 の Reader
  */
 function loadReader(): Promise<ReaderModel> {
+  if (readerPromise && Date.now() - readerLoadedAt > READER_TTL_MS) {
+    readerPromise = null;
+  }
   if (!readerPromise) {
+    readerLoadedAt = Date.now();
     readerPromise = (async () => {
       const localPath = process.env.GEOIP_DB_PATH;
       const buffer = localPath ?
@@ -101,3 +114,28 @@ export const location = onRequest({memory: "512MiB"}, async (req, res) => {
     res.status(400).json({error: "invalid_ip", ip});
   }
 });
+
+// MaxMind は毎週火曜と金曜（米国時間）に GeoLite2 を更新するので、
+// 日本時間の水曜と土曜の朝に取りに行く
+export const updateGeoip = onSchedule(
+  {
+    schedule: "0 9 * * 3,6",
+    timeZone: "Asia/Tokyo",
+    secrets: [maxmindLicenseKey],
+    memory: "1GiB",
+    timeoutSeconds: 300,
+    retryCount: 2,
+  },
+  async () => {
+    const db = await downloadGeoLite2(
+      maxmindAccountId.value(),
+      maxmindLicenseKey.value(),
+    );
+    const saved = await saveGeoLite2(db);
+    logger.info(saved ? "GeoLite2 updated" : "GeoLite2 unchanged", {
+      databaseDate: db.databaseDate,
+      sha256: db.sha256,
+      bytes: db.mmdb.length,
+    });
+  },
+);
