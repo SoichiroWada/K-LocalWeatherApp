@@ -10,7 +10,11 @@
     "emulators": "npm run build && npm --prefix functions run build && firebase emulators:start --only functions,hosting"
   },
   "devDependencies": {
+    "@types/leaflet": "^1.9.22",
     "typescript": "^6.0.3",
     "vite": "^8.3.5"
+  },
+  "dependencies": {
+    "leaflet": "^1.9.4"
   }
 }

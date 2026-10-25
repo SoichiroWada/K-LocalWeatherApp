@@ -5,6 +5,7 @@ import {
   officeForPrefecture,
   type Areas,
 } from "./area.ts";
+import { setupRadar, setupWeatherCharts } from "./imagery.ts";
 import { fetchForecast, type DailyForecast, type HourlySlot } from "./jma.ts";
 
 /** /api/location の応答 */
@@ -250,3 +251,5 @@ async function main(): Promise<void> {
 }
 
 main();
+setupRadar();
+setupWeatherCharts();

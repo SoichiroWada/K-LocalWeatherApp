@@ -178,3 +178,119 @@ main {
 .site-footer a {
   color: inherit;
 }
+
+/* 雨雲・衛星画像と天気図は、広い画面では横に並べる */
+.panel-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.thumb {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--bg);
+  cursor: zoom-in;
+}
+
+.map-thumb {
+  height: 320px;
+  /* 縮小表示の地図は操作させず、クリックをボタンに渡す */
+  pointer-events: none;
+}
+
+.chart-thumb {
+  display: block;
+  width: 100%;
+  height: 320px;
+  object-fit: contain;
+  background: #fff;
+}
+
+.thumb-hint {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  z-index: 1000;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 0.75rem;
+}
+
+.viewer {
+  width: min(96vw, 1000px);
+  max-height: 94vh;
+  padding: 12px 16px 16px;
+  border: none;
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--text);
+}
+
+.viewer::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.viewer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.viewer-header h2 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.viewer-close {
+  border: none;
+  background: none;
+  color: var(--text);
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.viewer-map {
+  height: min(75vh, 760px);
+  border-radius: 6px;
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.tabs button {
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--panel);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.tabs button[aria-selected="true"] {
+  background: var(--text);
+  color: var(--panel);
+}
+
+.chart-large {
+  display: block;
+  width: 100%;
+  max-height: 80vh;
+  object-fit: contain;
+  background: #fff;
+}

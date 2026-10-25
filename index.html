@@ -30,19 +30,47 @@
         <div id="weekly" class="days">読み込み中…</div>
       </section>
 
-      <section class="panel">
-        <h2>雨雲・衛星画像</h2>
-        <p class="placeholder">準備中</p>
-      </section>
+      <div class="panel-row">
+        <section class="panel">
+          <h2>雨雲・衛星画像</h2>
+          <button type="button" id="radar-open" class="thumb" aria-label="雨雲・衛星画像を拡大">
+            <div id="radar-thumb" class="map-thumb"></div>
+            <span class="thumb-hint">クリックで拡大</span>
+          </button>
+          <p id="radar-time" class="note"></p>
+        </section>
 
-      <section class="panel">
-        <h2>天気図</h2>
-        <p class="placeholder">準備中</p>
-      </section>
+        <section class="panel">
+          <h2>天気図</h2>
+          <button type="button" id="chart-open" class="thumb" aria-label="天気図を拡大">
+            <img id="chart-thumb" class="chart-thumb" alt="天気図" />
+            <span class="thumb-hint">クリックで拡大</span>
+          </button>
+          <p id="chart-time" class="note"></p>
+        </section>
+      </div>
     </main>
 
+    <dialog id="radar-dialog" class="viewer">
+      <div class="viewer-header">
+        <h2>雨雲・衛星画像</h2>
+        <form method="dialog"><button class="viewer-close" aria-label="閉じる">×</button></form>
+      </div>
+      <div id="radar-map" class="viewer-map"></div>
+      <p id="radar-dialog-time" class="note"></p>
+    </dialog>
+
+    <dialog id="chart-dialog" class="viewer">
+      <div class="viewer-header">
+        <h2>天気図</h2>
+        <form method="dialog"><button class="viewer-close" aria-label="閉じる">×</button></form>
+      </div>
+      <div id="chart-tabs" class="tabs" role="tablist"></div>
+      <img id="chart-large" class="chart-large" alt="天気図" />
+    </dialog>
+
     <footer class="site-footer">
-      <p>出典：気象庁ホームページ</p>
+      <p>出典：気象庁ホームページ、地図：国土地理院</p>
       <p>
         This product includes GeoLite2 data created by MaxMind, available from
         <a href="https://www.maxmind.com">https://www.maxmind.com</a>.
